@@ -1,43 +1,30 @@
-// interfaces
-interface IsPerson {
-  name: string;
-  age: number;
-  speak(a: string): void;
-  spend(a: number): number;
-}
-
-const me: IsPerson = {
-  name: "Sherifdeen",
-  age: 17,
-  speak(text: string): void {
-    console.log(text);
-  },
-  spend(amount: number): number {
-    console.log(`I spent ${amount}`);
-    return amount;
-  },
-};
-
-const greetPerson = (person: IsPerson): void => {
-  console.log("Hello", person.name);
-};
-
-greetPerson(me);
-
-console.log(me);
-
 import { Invoice } from "./classes/Invoice.js";
+import { ListTemplate } from "./classes/ListTemplate.js";
+import { Payment } from "./classes/Payment.js";
+import { HasFormatter } from "./interfaces/HasFormatter.js";
 
-const invOne = new Invoice("John", "Laptop", 2000);
-const invTwo = new Invoice("Mark", "Website development", 500);
+// let docOne: HasFormatter;
+// let docTwo: HasFormatter;
 
-const invoices: Invoice[] = [];
-invoices.push(invOne);
-invoices.push(invTwo);
+// docOne = new Invoice("mario", "web work", 250);
+// docTwo = new Payment("ryu", "car wash", 120);
 
-invoices.forEach((inv) => {
-  console.log(inv.client, inv.amount, inv.format());
-});
+// let docs: HasFormatter[] = [];
+// docs.push(docOne);
+// docs.push(docTwo);
+
+// console.log(docs);
+
+// const invOne = new Invoice("John", "Laptop", 2000);
+// const invTwo = new Invoice("Mark", "Website development", 500);
+
+// const invoices: Invoice[] = [];
+// invoices.push(invOne);
+// invoices.push(invTwo);
+
+// invoices.forEach((inv) => {
+//   console.log(inv.client, inv.amount, inv.format());
+// });
 
 const form = document.querySelector(".new-item-form") as HTMLFormElement;
 
@@ -47,7 +34,20 @@ const toFrom = form.querySelector("#toFrom") as HTMLInputElement;
 const details = form.querySelector("#details") as HTMLInputElement;
 const amount = form.querySelector("#amount") as HTMLInputElement;
 
+// list template instance
+const ul = document.querySelector("ul")!;
+const list = new ListTemplate(ul);
+
 form.addEventListener("submit", (e: SubmitEvent) => {
   e.preventDefault();
-  console.log(type.value, toFrom.value, details.value, amount.valueAsNumber);
+
+  let doc: HasFormatter;
+
+  if (type.value === "invoice") {
+    doc = new Invoice(toFrom.value, details.value, amount.valueAsNumber);
+  } else {
+    doc = new Payment(toFrom.value, details.value, amount.valueAsNumber);
+  }
+
+  list.render(doc, "New Log", "end");
 });
